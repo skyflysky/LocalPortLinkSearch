@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Worker
@@ -36,6 +37,23 @@ public class Worker
 		String commandTasklist = "tasklist|findstr " + pid;
 		String proccessName = analysisTaskList(exe(commandTasklist) , pid);
 		System.out.println("端口:" + portNum + "\tpid:" + pid + "\t进程名:" + proccessName);
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("输入kk杀死该进程以释放端口，其他任意输入退出。");
+		String input = scanner.next();
+		scanner.close();
+		if(input.equals("kk"))
+		{
+			String commandTaskkill = "taskkill /pid " + pid + " -t -f";
+			exe(commandTaskkill);
+			if(analysisNetstat(exe(commandNetstat), portNum) == null)
+			{
+				System.out.println("该端口已释放");
+			}
+			else
+			{
+				System.out.println("释放端口失败，请手动释放");
+			}
+		}
 		return;
 	}
 	
